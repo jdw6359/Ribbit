@@ -1,8 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="woodward.joshua.ribbit.UI.RecipientsActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_send"
+        android:title="@string/action_send"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:showAsAction="always"
+        android:visible="false"
+        android:icon="@drawable/ic_action_send_now"/>
+
 </menu>

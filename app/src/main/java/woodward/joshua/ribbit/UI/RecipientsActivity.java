@@ -6,16 +6,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import woodward.joshua.ribbit.Model.ParseConstants;
@@ -24,6 +29,8 @@ import woodward.joshua.ribbit.R;
 public class RecipientsActivity extends ListActivity {
 
     public static final String TAG= RecipientsActivity.class.getSimpleName();
+
+    protected MenuItem mSendMenuItem;
 
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
@@ -35,6 +42,8 @@ public class RecipientsActivity extends ListActivity {
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_recipients);
+
+
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
@@ -83,9 +92,48 @@ public class RecipientsActivity extends ListActivity {
     }
 
     @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        int recipientCount=l.getCheckedItemCount();
+        if(recipientCount>0){
+            //show send action button
+            mSendMenuItem.setVisible(true);
+        }else{
+            //do not show send action button
+            mSendMenuItem.setVisible(false);
+        }
+    }
+
+    protected ParseObject createMessage(){
+
+        ParseObject message=new ParseObject(ParseConstants.CLASS_MESSAGES);
+        message.put(ParseConstants.KEY_SENDER_ID,ParseUser.getCurrentUser().getObjectId());
+        message.put(ParseConstants.KEY_SENDER_NAME,ParseUser.getCurrentUser().getUsername());
+        message.put(ParseConstants.KEY_RECIPIENT_IDS,getRecipientIds());
+
+        return message;
+    }
+
+    protected ArrayList<String> getRecipientIds(){
+
+        ArrayList<String> recipientIds=new ArrayList<String>();
+        //loop through checked items in list and append to recipientIds
+        for(int i=0;i<getListView().getCount();i++){
+            if(getListView().isItemChecked(i)){
+                recipientIds.add(mFriends.get(i).getObjectId());
+            }
+        }
+        return recipientIds;
+    }
+
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.recipients, menu);
+        mSendMenuItem=menu.getItem(0);
         return true;
     }
 
@@ -95,7 +143,13 @@ public class RecipientsActivity extends ListActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send) {
+
+            //create a parse object for our "message" (file)
+            ParseObject message=createMessage();
+            //send(message);
+            //upload it to Parse
+
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -9,6 +9,7 @@
     <string name="action_edit_friends">Edit Friends</string>
     <string name="action_camera">Camera</string>
     <string name="action_logout">Log Out</string>
+    <string name="action_send">Send</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_edit_friends">Edit Friends</string>
