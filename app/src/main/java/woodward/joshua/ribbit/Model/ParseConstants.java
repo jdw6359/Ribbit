@@ -16,6 +16,9 @@ public final class ParseConstants {
     public static final String KEY_FILE="file";
     public static final String KEY_FILE_TYPE="fileType";
 
+    public static final String TYPE_IMAGE="image";
+    public static final String TYPE_VIDEO="video";
+
 
     //query-specific limits
     public static final int LIMIT_FRIENDS=1000;

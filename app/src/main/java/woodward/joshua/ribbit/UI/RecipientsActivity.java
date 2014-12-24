@@ -2,6 +2,7 @@ package woodward.joshua.ribbit.UI;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,7 +12,6 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -28,6 +28,9 @@ import woodward.joshua.ribbit.R;
 
 public class RecipientsActivity extends ListActivity {
 
+    protected Uri mMediaUri;
+    protected String mFileType;
+
     public static final String TAG= RecipientsActivity.class.getSimpleName();
 
     protected MenuItem mSendMenuItem;
@@ -39,13 +42,12 @@ public class RecipientsActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_recipients);
-
-
-
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        mMediaUri=getIntent().getData();
+        mFileType=getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
     }
 
     public void onResume(){
@@ -111,12 +113,12 @@ public class RecipientsActivity extends ListActivity {
         message.put(ParseConstants.KEY_SENDER_ID,ParseUser.getCurrentUser().getObjectId());
         message.put(ParseConstants.KEY_SENDER_NAME,ParseUser.getCurrentUser().getUsername());
         message.put(ParseConstants.KEY_RECIPIENT_IDS,getRecipientIds());
+        message.put(ParseConstants.KEY_FILE_TYPE,mFileType);
 
         return message;
     }
 
     protected ArrayList<String> getRecipientIds(){
-
         ArrayList<String> recipientIds=new ArrayList<String>();
         //loop through checked items in list and append to recipientIds
         for(int i=0;i<getListView().getCount();i++){
@@ -126,8 +128,6 @@ public class RecipientsActivity extends ListActivity {
         }
         return recipientIds;
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,12 +144,10 @@ public class RecipientsActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_send) {
-
             //create a parse object for our "message" (file)
             ParseObject message=createMessage();
             //send(message);
             //upload it to Parse
-
             return true;
         }
         return super.onOptionsItemSelected(item);

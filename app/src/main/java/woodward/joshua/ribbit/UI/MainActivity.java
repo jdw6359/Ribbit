@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 
+import woodward.joshua.ribbit.Model.ParseConstants;
 import woodward.joshua.ribbit.R;
 
 public class MainActivity extends android.support.v4.app.FragmentActivity implements ActionBar.TabListener {
@@ -303,6 +304,18 @@ public class MainActivity extends android.support.v4.app.FragmentActivity implem
             //we have the right Uri, send the user to the recipients activity
             Intent recipientsIntent=new Intent(MainActivity.this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
+
+            String fileType;
+            if(requestCode==PICK_PHOTO_REQUEST || requestCode==TAKE_PHOTO_REQUEST){
+                fileType= ParseConstants.TYPE_IMAGE;
+            }else{
+                fileType=ParseConstants.TYPE_VIDEO;
+            }
+            recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE,fileType);
+
+
+
+
             startActivity(recipientsIntent);
         }
         //case hit when the user cancels out of the result activity
