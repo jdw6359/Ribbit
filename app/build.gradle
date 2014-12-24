@@ -26,4 +26,5 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.1.2'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile files('libs/commons-io-2.4.jar')
+    compile files('libs/picasso-2.4.0.jar')
 }

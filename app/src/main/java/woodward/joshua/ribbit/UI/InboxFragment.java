@@ -1,20 +1,25 @@
 package woodward.joshua.ribbit.UI;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
 
+import woodward.joshua.ribbit.Model.MessageAdapter;
 import woodward.joshua.ribbit.Model.ParseConstants;
 import woodward.joshua.ribbit.R;
 
@@ -59,14 +64,33 @@ public class InboxFragment extends android.support.v4.app.ListFragment {
                         usernames[i]=message.getString(ParseConstants.KEY_SENDER_NAME);
                         i++;
                     }
-                    //Create an array adapter of type String, give params (Context, ListType, Source)
-                    ArrayAdapter<String> friendsAdapter=new ArrayAdapter<String>(getListView().getContext(), android.R.layout.simple_list_item_1, usernames);
-                    //setListAdapter() is method of ListActivity (the class this activity inherits from)
-                    setListAdapter(friendsAdapter);
+                    MessageAdapter inboxAdapter=new MessageAdapter(getListView().getContext(),mMessages);
+                    setListAdapter(inboxAdapter);
                 }else{
                     //fuuuuuuck
                 }
             }
         });
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        //determine if image or video
+        ParseObject message=mMessages.get(position);
+        String messageType=message.getString(ParseConstants.KEY_FILE_TYPE);
+        ParseFile file=message.getParseFile(ParseConstants.KEY_FILE);
+        Uri fileUri= Uri.parse(file.getUrl());
+
+        if(messageType.equals(ParseConstants.TYPE_IMAGE)){
+            //view the image
+            Intent viewImageIntent=new Intent(getActivity(),ViewImageActivity.class);
+            viewImageIntent.setData(fileUri);
+            startActivity(viewImageIntent);
+        }else{
+            //view the video
+        }
+
     }
 }
