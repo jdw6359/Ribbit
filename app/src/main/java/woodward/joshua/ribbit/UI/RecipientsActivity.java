@@ -15,14 +15,17 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import woodward.joshua.ribbit.Model.FileHelper;
 import woodward.joshua.ribbit.Model.ParseConstants;
 import woodward.joshua.ribbit.R;
 
@@ -115,7 +118,30 @@ public class RecipientsActivity extends ListActivity {
         message.put(ParseConstants.KEY_RECIPIENT_IDS,getRecipientIds());
         message.put(ParseConstants.KEY_FILE_TYPE,mFileType);
 
-        return message;
+        //get a byte array from FileHelper class
+        byte[] fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
+        if(fileBytes==null){
+            //send back null value
+            return null;
+        }else{
+            //file bytes has data
+            //ready to create parse file
+            if(mFileType.equals(ParseConstants.TYPE_IMAGE)){
+                //we have an image
+                //reduces the size of the file
+                fileBytes=FileHelper.reduceImageForUpload(fileBytes);
+            }
+
+            String fileName=FileHelper.getFileName(this,mMediaUri, mFileType);
+
+            //create ParseFile object
+            ParseFile mediaFile=new ParseFile(fileName, fileBytes);
+            //add the file to the message
+            message.put(ParseConstants.KEY_FILE,mediaFile);
+
+            //returned is a ParseObject of class ParseConstants.CLASS_MESSAGES
+            return message;
+        }
     }
 
     protected ArrayList<String> getRecipientIds(){
@@ -146,10 +172,46 @@ public class RecipientsActivity extends ListActivity {
         if (id == R.id.action_send) {
             //create a parse object for our "message" (file)
             ParseObject message=createMessage();
-            //send(message);
-            //upload it to Parse
+            if(message==null){
+                AlertDialog.Builder messageAlertBuilder=new AlertDialog.Builder(RecipientsActivity.this);
+                messageAlertBuilder.setTitle(getString(R.string.message_error_title));
+                messageAlertBuilder.setMessage(getString(R.string.message_error_message));
+                messageAlertBuilder.setPositiveButton(android.R.string.ok,null);
+                AlertDialog messageAlert=messageAlertBuilder.create();
+                messageAlert.show();
+            }else{
+                send(message);
+                //finishes the activity and loads up the last Activity in the stack
+                finish();
+            }
+
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //given a ParseObject, method will save message to backend
+    protected void send(ParseObject message){
+        //uploads ParseObject "message" to backend
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                //if there was an exception,
+                if(e==null){
+                    //successful upload
+                    Toast.makeText(RecipientsActivity.this, "Message Sent",Toast.LENGTH_LONG).show();
+                }else{
+                    //unsuccessful upload
+                    AlertDialog.Builder uploadAlertBuilder=new AlertDialog.Builder(RecipientsActivity.this);
+                    uploadAlertBuilder.setTitle(getString(R.string.upload_error_title));
+                    uploadAlertBuilder.setMessage(getString(R.string.upload_error_message));
+                    uploadAlertBuilder.setPositiveButton(android.R.string.ok,null);
+                    AlertDialog uploadAlert=uploadAlertBuilder.create();
+                    uploadAlert.show();
+                }
+            }
+        });
+    }
+
+
 }

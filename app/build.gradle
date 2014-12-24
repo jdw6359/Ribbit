@@ -23,9 +23,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v13:19.+'
-
-
     compile 'com.parse.bolts:bolts-android:1.1.2'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
-
+    compile files('libs/commons-io-2.4.jar')
 }
