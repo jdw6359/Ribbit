@@ -16,7 +16,9 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import woodward.joshua.ribbit.Model.MessageAdapter;
@@ -29,6 +31,8 @@ import woodward.joshua.ribbit.R;
 public class InboxFragment extends android.support.v4.app.ListFragment {
 
     protected List<ParseObject> mMessages;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,8 +68,14 @@ public class InboxFragment extends android.support.v4.app.ListFragment {
                         usernames[i]=message.getString(ParseConstants.KEY_SENDER_NAME);
                         i++;
                     }
-                    MessageAdapter inboxAdapter=new MessageAdapter(getListView().getContext(),mMessages);
-                    setListAdapter(inboxAdapter);
+
+                    //check to see if list view has an adapter
+                    if(getListView().getAdapter()==null){
+                        MessageAdapter inboxAdapter=new MessageAdapter(getListView().getContext(),mMessages);
+                        setListAdapter(inboxAdapter);
+                    }else{
+                        ((MessageAdapter)getListView().getAdapter()).refill(mMessages);
+                    }
                 }else{
                     //fuuuuuuck
                 }
@@ -90,7 +100,29 @@ public class InboxFragment extends android.support.v4.app.ListFragment {
             startActivity(viewImageIntent);
         }else{
             //view the video
+            Intent intent=new Intent(Intent.ACTION_VIEW,fileUri);
+            intent.setDataAndType(fileUri,"video/*");
+            startActivity(intent);
         }
 
+        //delete the message
+        List<String> ids=message.getList(ParseConstants.KEY_RECIPIENT_IDS);
+
+        //check the count of recipients
+        if(ids.size()==1){
+            //last recipient, delete the file from the backend
+            //crossing our fingers and hoping that it will delete in the background
+            message.deleteInBackground();
+
+        }else{
+            //remove the recipient and save
+            ids.remove(ParseUser.getCurrentUser().getObjectId());
+
+            ArrayList<String> idsToRemove=new ArrayList<String>();
+            idsToRemove.add(ParseUser.getCurrentUser().getObjectId());
+
+            message.removeAll(ParseConstants.KEY_RECIPIENT_IDS,idsToRemove);
+            message.saveInBackground();
+        }
     }
 }

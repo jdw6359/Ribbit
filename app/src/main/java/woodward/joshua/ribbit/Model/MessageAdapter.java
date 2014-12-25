@@ -25,6 +25,7 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
     public MessageAdapter(Context context, List<ParseObject> messages) {
         super(context, R.layout.message_item, messages);
 
+        //assign member variables
         mContext=context;
         mMessages=messages;
 
@@ -34,6 +35,7 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        //follow 'ViewHolder' design pattern to adapt custom list layout
         ViewHolder holder;
         if(convertView==null){
             //create it for the first time
@@ -41,13 +43,16 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
             holder=new ViewHolder();
             holder.iconImageView=(ImageView)convertView.findViewById(R.id.messageIcon);
             holder.nameLabel=(TextView)convertView.findViewById(R.id.senderLabel);
+            convertView.setTag(holder);
         }else{
             //it already exists, we just need to change the data
             holder=(ViewHolder)convertView.getTag();
         }
 
+        //get the message object in question
         ParseObject message=mMessages.get(position);
 
+        //decide which image to show (photo vs. video)
         if(message.getString(ParseConstants.KEY_FILE_TYPE).equals(ParseConstants.TYPE_IMAGE)){
             //the file is an image
             holder.iconImageView.setImageResource(R.drawable.ic_action_picture);
@@ -64,6 +69,13 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
     private static class ViewHolder{
         ImageView iconImageView;
         TextView nameLabel;
+    }
+
+    public void refill(List<ParseObject> messages){
+        //clear current data
+        mMessages.clear();
+        mMessages.addAll(messages);
+        notifyDataSetChanged();
     }
 
 }

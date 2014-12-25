@@ -14,6 +14,8 @@
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="title_activity_edit_friends">Edit Friends</string>
     <string name="title_activity_recipients">Recipients</string>
+    <string name="title_activity_view_image">Ribbit</string>
+
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="email_hint">Email</string>
@@ -48,7 +50,7 @@
     <string name="message_error_message">There was an error creating the message you would like to send</string>
     <string name="upload_error_title">Sorry, there was an error</string>
     <string name="upload_error_message">There was an error sending the message</string>
-    <string name="title_activity_view_image">Ribiit</string>
-    <string name="hello_world">Hello world!</string>
+
+
 
 </resources>
