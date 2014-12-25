@@ -21,7 +21,7 @@
     <string name="email_hint">Email</string>
     <string name="login_button_label">Login</string>
     <string name="signup_button_label">Sign Up</string>
-    <string name="sign_up_text">Sign Up</string>
+    <string name="sign_up_text">Don\'t have an account? Sign up</string>
     <string name="signup_error_message">Please make sure you enter a username, password, and email address!</string>
     <string name="signup_error_title">Invalid Input</string>
     <string name="login_error_message">Please make sure you enter a username and password!</string>
@@ -51,6 +51,8 @@
     <string name="upload_error_title">Sorry, there was an error</string>
     <string name="upload_error_message">There was an error sending the message</string>
 
+    <string name="content_description_background">Ribbit Frog Background Image</string>
+    <string name="signin_subtitle">A Woodward Studio Project</string>
 
 
 </resources>

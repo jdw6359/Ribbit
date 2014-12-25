@@ -31,6 +31,9 @@ public class SignUpActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_sign_up);
 
+        //get and hide the action bar
+        getActionBar().hide();
+
         //sets member variables
         mUsername=(EditText)findViewById(R.id.usernameField);
         mPassword=(EditText)findViewById(R.id.passwordField);

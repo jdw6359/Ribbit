@@ -1,5 +1,6 @@
 package woodward.joshua.ribbit.UI;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,10 +27,14 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //indicates that we will want to utilize this 'Window' feature at some point in the future
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setContentView(R.layout.activity_login);
+
+        //get and hide the action bar
+        getActionBar().hide();
 
         mSignUpTextView=(TextView)findViewById(R.id.signUpText);
 
