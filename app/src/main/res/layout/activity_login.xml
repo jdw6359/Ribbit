@@ -2,59 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_fill"
+    style="@style/AuthBackground"
     tools:context="woodward.joshua.ribbit.UI.LoginActivity">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/backgroundImage"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/background"
-        android:scaleType="fitStart"
-        android:contentDescription="@string/content_description_background"/>
-
+        android:contentDescription="@string/content_description_background"
+        style="@style/AuthBackgroundImage"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/title"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:text="@string/app_name"
-        android:textSize="60sp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"/>
+        style="@style/AuthTitle.AuthMainTitle"
+    />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/signin_subtitle"
         android:id="@+id/subtitle"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true"
-        android:textSize="13sp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"/>
-
+        style="@style/AuthTitle.AuthSubtitle"
+    />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/subtitle"
         android:id="@+id/editTextLayout"
-        android:layout_marginTop="@dimen/login_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:paddingLeft="@dimen/login_horizontal_padding"
-        android:paddingRight="@dimen/login_horizontal_padding"
-        android:paddingTop="@dimen/login_vertical_padding"
-        android:paddingBottom="@dimen/login_vertical_padding"
-        android:background="@android:color/white">
+        style="@style/AuthFieldContainer">
 
         <EditText
             android:layout_width="match_parent"
