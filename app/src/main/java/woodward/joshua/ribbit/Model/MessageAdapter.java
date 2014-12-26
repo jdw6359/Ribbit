@@ -1,6 +1,7 @@
 package woodward.joshua.ribbit.Model;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.parse.ParseObject;
 
+import java.util.Date;
 import java.util.List;
 
 import woodward.joshua.ribbit.R;
@@ -43,6 +45,7 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
             holder=new ViewHolder();
             holder.iconImageView=(ImageView)convertView.findViewById(R.id.messageIcon);
             holder.nameLabel=(TextView)convertView.findViewById(R.id.senderLabel);
+            holder.timeLabel=(TextView)convertView.findViewById(R.id.timeLabel);
             convertView.setTag(holder);
         }else{
             //it already exists, we just need to change the data
@@ -52,12 +55,22 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
         //get the message object in question
         ParseObject message=mMessages.get(position);
 
+        //create date object
+        // .getCreatedAt() is a special method of ParseObject since CreatedAt field is uniform
+        Date createdAt=message.getCreatedAt();
+        //create a time equivalent to now
+        long now=new Date().getTime();
+        //static helper method to get string representation of relative span
+        String convertedDate= DateUtils.getRelativeTimeSpanString(createdAt.getTime(),now,DateUtils.SECOND_IN_MILLIS).toString();
+
+        holder.timeLabel.setText(convertedDate);
+
         //decide which image to show (photo vs. video)
         if(message.getString(ParseConstants.KEY_FILE_TYPE).equals(ParseConstants.TYPE_IMAGE)){
             //the file is an image
-            holder.iconImageView.setImageResource(R.drawable.ic_action_picture);
+            holder.iconImageView.setImageResource(R.drawable.ic_picture);
         }else{
-            holder.iconImageView.setImageResource(R.drawable.ic_action_play_over_video);
+            holder.iconImageView.setImageResource(R.drawable.ic_video);
         }
 
         holder.nameLabel.setText(message.getString(ParseConstants.KEY_SENDER_NAME));
@@ -69,6 +82,7 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
     private static class ViewHolder{
         ImageView iconImageView;
         TextView nameLabel;
+        TextView timeLabel;
     }
 
     public void refill(List<ParseObject> messages){
