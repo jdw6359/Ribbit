@@ -52,4 +52,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
+
+    //custom method using to return drawable images for tabs
+    public int getIcon(int position) {
+        switch (position) {
+            case 0:
+                return R.drawable.ic_tab_inbox;
+            case 1:
+                return R.drawable.ic_tab_friends;
+        }
+        //fail safe catch
+        return R.drawable.ic_tab_inbox;
+    }
 }
