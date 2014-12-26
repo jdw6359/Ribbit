@@ -20,7 +20,8 @@
     <string name="password_hint">Password</string>
     <string name="email_hint">Email</string>
     <string name="login_button_label">SIGN IN</string>
-    <string name="signup_button_label">Sign Up</string>
+    <string name="signup_button_label">SIGN UP</string>
+    <string name="cancel_button_label">CANCEL</string>
     <string name="sign_up_text">Don\'t have an account? Sign up</string>
     <string name="signup_error_message">Please make sure you enter a username, password, and email address!</string>
     <string name="signup_error_title">Invalid Input</string>
@@ -53,6 +54,6 @@
 
     <string name="content_description_background">Ribbit Frog Background Image</string>
     <string name="signin_subtitle">A Woodward Studio Project</string>
-
+    <string name="content_description_button_divider">Button Divider</string>
 
 </resources>

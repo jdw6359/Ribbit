@@ -23,34 +23,53 @@
         style="@style/AuthFieldContainer">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/usernameField"
-            android:hint="@string/username_hint"/>
+            android:hint="@string/username_hint"
+            style="@style/AuthEditText">
+            <requestFocus/>
+        </EditText>
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
             android:id="@+id/passwordField"
-            android:hint="@string/password_hint"/>
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            style="@style/AuthEditText"/>
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
             android:id="@+id/emailField"
-            android:hint="@string/email_hint"/>
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress"
+            style="@style/AuthEditText"/>
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/buttonDivider"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/editTextLayout"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/button_divider"
+        android:contentDescription="@string/content_description_button_divider"/>
+
+    <Button
         android:text="@string/signup_button_label"
         android:id="@+id/signUpButton"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/editTextLayout"
-        android:layout_alignParentStart="true"/>
+        android:layout_toLeftOf="@id/buttonDivider"
+        android:layout_marginRight="0dp"
+        style="@style/AuthButton"/>
+
+    <Button
+        android:text="@string/cancel_button_label"
+        android:id="@+id/cancelButton"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/editTextLayout"
+        android:layout_toRightOf="@id/buttonDivider"
+        android:layout_marginLeft="0dp"
+        style="@style/AuthButton"/>
+
+
+
 </RelativeLayout>

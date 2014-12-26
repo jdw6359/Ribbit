@@ -25,39 +25,26 @@
         style="@style/AuthFieldContainer">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/usernameField"
-            android:focusable="true"
             android:hint="@string/username_hint"
-            android:textColorHint="@color/light_gray"
-            android:textSize="17sp"/>
-        <requestFocus/>
+            style="@style/AuthEditText">
+            <requestFocus/>
+        </EditText>
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
             android:id="@+id/passwordField"
             android:hint="@string/password_hint"
-            android:textColorHint="@color/light_gray"
-            android:textSize="17sp"/>
+            android:inputType="textPassword"
+            style="@style/AuthEditText"/>
     </LinearLayout>
 
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/login_button_label"
         android:id="@+id/loginButton"
-        android:layout_below="@+id/editTextLayout"
+        style="@style/AuthButton"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/button_custom"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:textSize="13sp"
-        android:textColor="@color/text_color"/>
+        android:layout_below="@+id/editTextLayout"/>
 
     <TextView
         android:layout_width="wrap_content"
