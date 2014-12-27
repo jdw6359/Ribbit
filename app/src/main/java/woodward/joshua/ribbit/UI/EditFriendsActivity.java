@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -22,25 +24,34 @@ import com.parse.SaveCallback;
 import java.util.List;
 
 import woodward.joshua.ribbit.Model.ParseConstants;
+import woodward.joshua.ribbit.Model.UserAdapter;
 import woodward.joshua.ribbit.R;
 
-public class EditFriendsActivity extends ListActivity {
+public class EditFriendsActivity extends Activity {
 
     public static final String TAG=EditFriendsActivity.class.getSimpleName();
 
     protected List<ParseUser> mUsers;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
+    protected GridView mGridView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_edit_friends);
+        setContentView(R.layout.user_grid);
+
+        mGridView=(GridView)findViewById(R.id.friendsGrid);
 
         //gets us the default list view associated with this activity
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+
+        TextView emptyTextView=(TextView)findViewById(android.R.id.empty);
+        //attach this as the empty text view for the grid view
+        mGridView.setEmptyView(emptyTextView);
+
     }
 
     @Override
@@ -72,10 +83,15 @@ public class EditFriendsActivity extends ListActivity {
                         usernames[i]=user.getUsername();
                         i++;
                     }
-                    //Create an array adapter of type String, give params (Context, ListType, Source)
-                    ArrayAdapter<String> friendsAdapter=new ArrayAdapter<String>(EditFriendsActivity.this, android.R.layout.simple_list_item_checked, usernames);
-                    //setListAdapter() is method of ListActivity (the class this activity inherits from)
-                    setListAdapter(friendsAdapter);
+
+                    //sets or refreshes the grid adapter
+                    if(mGridView.getAdapter()==null){
+                        UserAdapter friendsAdapter=new UserAdapter(EditFriendsActivity.this,mUsers);
+                        mGridView.setAdapter(friendsAdapter);
+                    }else{
+                        ((UserAdapter)mGridView.getAdapter()).refill(mUsers);
+                    }
+
                     //sets check marks for friend relationships
                     setFriendCheckmarks();
 
@@ -105,7 +121,7 @@ public class EditFriendsActivity extends ListActivity {
                         for(ParseUser friend:parseUsers){
                             if(friend.getObjectId().equals(user.getObjectId())){
                                 //need to set the checkmark
-                                getListView().setItemChecked(i,true);
+                                mGridView.setItemChecked(i, true);
                             }
                         }
                     }
@@ -115,31 +131,31 @@ public class EditFriendsActivity extends ListActivity {
             }
         });
     }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        //check to see if item is checked
-        //note: in super.onListItemClick(), item is toggled.
-        if(getListView().isItemChecked(position)){
-            //adds friend
-            mFriendsRelation.add(mUsers.get(position));
-        }else{
-            //removes friend
-            mFriendsRelation.remove(mUsers.get(position));
-        }
-        //regardless of whether we are adding or removing a relationship,
-        //save the state in the background here
-        mCurrentUser.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e!=null){
-                    //there was an exception, lets log
-                    Log.e(TAG,e.getMessage());
-                }
-            }
-        });
-    }
+//
+//    @Override
+//    protected void onListItemClick(ListView l, View v, int position, long id) {
+//        super.onListItemClick(l, v, position, id);
+//
+//        //check to see if item is checked
+//        //note: in super.onListItemClick(), item is toggled.
+//        if(getListView().isItemChecked(position)){
+//            //adds friend
+//            mFriendsRelation.add(mUsers.get(position));
+//        }else{
+//            //removes friend
+//            mFriendsRelation.remove(mUsers.get(position));
+//        }
+//        //regardless of whether we are adding or removing a relationship,
+//        //save the state in the background here
+//        mCurrentUser.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if(e!=null){
+//                    //there was an exception, lets log
+//                    Log.e(TAG,e.getMessage());
+//                }
+//            }
+//        });
+//    }
 
 }

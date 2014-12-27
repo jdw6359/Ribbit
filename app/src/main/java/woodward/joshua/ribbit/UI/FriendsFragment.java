@@ -3,17 +3,14 @@ package woodward.joshua.ribbit.UI;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -40,9 +37,10 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.friends_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.user_grid, container, false);
 
         mGridView=(GridView)rootView.findViewById(R.id.friendsGrid);
+
         TextView emptyTextView=(TextView)rootView.findViewById(android.R.id.empty);
         //attach this as the empty text view for the grid view
         mGridView.setEmptyView(emptyTextView);
