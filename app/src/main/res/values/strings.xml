@@ -56,5 +56,6 @@
     <string name="signin_subtitle">A Woodward Studio Project</string>
     <string name="content_description_button_divider">Button Divider</string>
     <string name="content_description_message_icon">Message Icon</string>
+    <string name="content_description_user_avatar">User Avatar</string>
 
 </resources>
