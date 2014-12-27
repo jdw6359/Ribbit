@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
@@ -60,7 +61,11 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
             holder.userImageView.setImageResource(R.drawable.avatar_empty);
         }else{
             String hash=MD5Util.md5Hex(email);
-            
+            String imageSize="204";
+            String returnParam="404";
+            String gravatarUrl="http://www.gravatar.com/avatar/"+hash+"?s=" + imageSize + "&d=" + returnParam;
+
+            Picasso.with(mContext).load(gravatarUrl).placeholder(R.drawable.avatar_empty).into(holder.userImageView);
         }
 
 
