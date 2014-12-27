@@ -7,15 +7,17 @@
     android:focusable="true">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/userImageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/avatar_empty"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/content_description_user_avatar"/>
+    android:id="@+id/userImageView"
+    android:src="@drawable/avatar_empty"
+    android:contentDescription="@string/content_description_user_avatar"
+    style="@style/GridImage"/>
+
+    <ImageView
+        android:id="@+id/checkImageView"
+        android:src="@drawable/avatar_selected"
+        android:contentDescription="@string/content_description_user_checkmark"
+        android:visibility="invisible"
+        style="@style/GridImage"/>
 
     <TextView
         android:id="@+id/nameLabel"
