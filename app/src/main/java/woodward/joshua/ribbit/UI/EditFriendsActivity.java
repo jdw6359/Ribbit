@@ -9,10 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -35,7 +37,7 @@ public class EditFriendsActivity extends Activity {
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
     protected GridView mGridView;
-
+    protected TextView mEmptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,16 @@ public class EditFriendsActivity extends Activity {
         //gets us the default list view associated with this activity
         mGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
 
-        TextView emptyTextView=(TextView)findViewById(android.R.id.empty);
-        //attach this as the empty text view for the grid view
-        mGridView.setEmptyView(emptyTextView);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(EditFriendsActivity.this, "Click at location: " + i, Toast.LENGTH_LONG).show();
+            }
+        });
 
+        mEmptyTextView=(TextView)findViewById(android.R.id.empty);
+        //attach this as the empty text view for the grid view
+        mGridView.setEmptyView(mEmptyTextView);
     }
 
     @Override

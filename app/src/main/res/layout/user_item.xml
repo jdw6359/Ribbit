@@ -4,12 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:focusable="true">
+    android:descendantFocusability="blocksDescendants">
 
     <ImageView
     android:id="@+id/userImageView"
     android:src="@drawable/avatar_empty"
     android:contentDescription="@string/content_description_user_avatar"
+    android:clickable="false"
+    android:focusableInTouchMode="false"
+    android:focusable="false"
     style="@style/GridImage"/>
 
     <ImageView
@@ -17,6 +20,9 @@
         android:src="@drawable/avatar_selected"
         android:contentDescription="@string/content_description_user_checkmark"
         android:visibility="invisible"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
         style="@style/GridImage"/>
 
     <TextView
@@ -26,6 +32,9 @@
         android:maxLines="2"
         android:padding="4dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/userImageView"/>
+        android:layout_below="@id/userImageView"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:focusable="false"/>
 
 </RelativeLayout>
