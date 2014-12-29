@@ -12,6 +12,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,12 +51,8 @@ public class EditFriendsActivity extends Activity {
         //gets us the default list view associated with this activity
         mGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
 
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(EditFriendsActivity.this, "Click at location: " + i, Toast.LENGTH_LONG).show();
-            }
-        });
+        //set click listener for entire view
+        mGridView.setOnItemClickListener(gridClickListener);
 
         mEmptyTextView=(TextView)findViewById(android.R.id.empty);
         //attach this as the empty text view for the grid view
@@ -139,31 +136,38 @@ public class EditFriendsActivity extends Activity {
             }
         });
     }
-//
-//    @Override
-//    protected void onListItemClick(ListView l, View v, int position, long id) {
-//        super.onListItemClick(l, v, position, id);
-//
-//        //check to see if item is checked
-//        //note: in super.onListItemClick(), item is toggled.
-//        if(getListView().isItemChecked(position)){
-//            //adds friend
-//            mFriendsRelation.add(mUsers.get(position));
-//        }else{
-//            //removes friend
-//            mFriendsRelation.remove(mUsers.get(position));
-//        }
-//        //regardless of whether we are adding or removing a relationship,
-//        //save the state in the background here
-//        mCurrentUser.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if(e!=null){
-//                    //there was an exception, lets log
-//                    Log.e(TAG,e.getMessage());
-//                }
-//            }
-//        });
-//    }
+
+    protected AdapterView.OnItemClickListener gridClickListener=new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+            ImageView checkImageView=(ImageView)view.findViewById(R.id.checkImageView);
+
+            //check to see if item is checked
+            //note: in super.onListItemClick(), item is toggled.nnnnnnnnnnnnn
+            if(mGridView.isItemChecked(position)){
+                //adds friend
+                mFriendsRelation.add(mUsers.get(position));
+                //make checkmark visible
+                checkImageView.setVisibility(View.VISIBLE);
+            }else{
+                //removes friend
+                mFriendsRelation.remove(mUsers.get(position));
+                //make the checkmark invisible
+                checkImageView.setVisibility(View.INVISIBLE);
+            }
+            //regardless of whether we are adding or removing a relationship,
+            //save the state in the background here
+            mCurrentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e!=null){
+                        //there was an exception, lets log
+                        Log.e(TAG,e.getMessage());
+                    }
+                }
+            });
+        }
+    };
 
 }
