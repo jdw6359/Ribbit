@@ -201,8 +201,6 @@ public class MainActivity extends android.support.v4.app.FragmentActivity implem
         ParseUser currentUser=ParseUser.getCurrentUser();
         if(currentUser==null){
             navigateToLogin();
-        }else{
-            Toast.makeText(this,currentUser.getUsername() + "'s Inbox!",Toast.LENGTH_LONG).show();
         }
 
         // Set up the action bar.

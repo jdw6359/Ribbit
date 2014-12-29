@@ -1,5 +1,6 @@
 package woodward.joshua.ribbit.UI;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.net.Uri;
@@ -9,8 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -27,9 +32,10 @@ import java.util.List;
 
 import woodward.joshua.ribbit.Model.FileHelper;
 import woodward.joshua.ribbit.Model.ParseConstants;
+import woodward.joshua.ribbit.Model.UserAdapter;
 import woodward.joshua.ribbit.R;
 
-public class RecipientsActivity extends ListActivity {
+public class RecipientsActivity extends Activity {
 
     protected Uri mMediaUri;
     protected String mFileType;
@@ -41,13 +47,20 @@ public class RecipientsActivity extends ListActivity {
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
     protected List<ParseUser> mFriends;
+    protected GridView mGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.user_grid);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        mGridView=(GridView)findViewById(R.id.friendsGrid);
+        mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setOnItemClickListener(recipientsClickListener);
+
+        TextView emptyTextView=(TextView)findViewById(android.R.id.empty);
+        mGridView.setEmptyView(emptyTextView);
 
         mMediaUri=getIntent().getData();
         mFileType=getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
@@ -79,10 +92,14 @@ public class RecipientsActivity extends ListActivity {
                         usernames[i]=user.getUsername();
                         i++;
                     }
-                    //Create an array adapter of type String, give params (Context, ListType, Source)
-                    ArrayAdapter<String> friendsAdapter=new ArrayAdapter<String>(getListView().getContext(), android.R.layout.simple_list_item_checked, usernames);
-                    //setListAdapter() is method of ListActivity (the class this activity inherits from)
-                    setListAdapter(friendsAdapter);
+
+                    if(mGridView.getAdapter()==null){
+                        UserAdapter recipientsAdapter =new UserAdapter(RecipientsActivity.this,mFriends);
+                        mGridView.setAdapter(recipientsAdapter);
+                    }else{
+                        ((UserAdapter)mGridView.getAdapter()).refill(mFriends);
+                    }
+
                 }else{
                     Log.e(TAG, e.getMessage());
                     AlertDialog.Builder friendsListAlertBuilder=new AlertDialog.Builder(RecipientsActivity.this);
@@ -96,19 +113,32 @@ public class RecipientsActivity extends ListActivity {
         });
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
 
-        int recipientCount=l.getCheckedItemCount();
-        if(recipientCount>0){
-            //show send action button
-            mSendMenuItem.setVisible(true);
-        }else{
-            //do not show send action button
-            mSendMenuItem.setVisible(false);
+    protected AdapterView.OnItemClickListener recipientsClickListener=new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+            //show or hide the send button
+            int recipientCount=mGridView.getCheckedItemCount();
+            if(recipientCount>0){
+                //show send action button
+                mSendMenuItem.setVisible(true);
+            }else{
+                //do not show send action button
+                mSendMenuItem.setVisible(false);
+            }
+
+            ImageView checkImageView=(ImageView)view.findViewById(R.id.checkImageView);
+
+            //check / uncheck the friends check mark
+            if(mGridView.isItemChecked(position)){
+                checkImageView.setVisibility(View.VISIBLE);
+            }else{
+                checkImageView.setVisibility(View.INVISIBLE);
+            }
         }
-    }
+    };
+
 
     protected ParseObject createMessage(){
 
@@ -147,8 +177,8 @@ public class RecipientsActivity extends ListActivity {
     protected ArrayList<String> getRecipientIds(){
         ArrayList<String> recipientIds=new ArrayList<String>();
         //loop through checked items in list and append to recipientIds
-        for(int i=0;i<getListView().getCount();i++){
-            if(getListView().isItemChecked(i)){
+        for(int i=0;i<mGridView.getCount();i++){
+            if(mGridView.isItemChecked(i)){
                 recipientIds.add(mFriends.get(i).getObjectId());
             }
         }
